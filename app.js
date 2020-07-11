@@ -1,14 +1,21 @@
 var express = require("express");
-var http = require("http");
+var bodyParser = require("body-parser");
+var apiroutes = require("./routes/apiRoutes");
 
 var app = express();
 
-app.get("/", function (req, res) {
-    res.send("HANS");
-});
+app.use(bodyParser.json());
 
-app.get("/about", function (req, res) {
-    res.send("About da site");
+app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader(
+        "Access-Control-Allow-Headers",
+        "Origin, X-Requested-With, Content-Type, Accept, authData, status, catid, cred, prod"
+    );
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
+    next();
 })
 
-app.listen(8080);
+app.use("/api", apiroutes);
+
+module.exports = app;
