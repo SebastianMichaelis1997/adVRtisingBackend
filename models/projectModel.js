@@ -14,7 +14,7 @@ const projectModel = (sequelize, type) => {
             type: type.STRING,
             allowNull: false
         },
-        setializedImageIDs: {
+        ImageJSON: {
             type: type.STRING,
             allowNull: false
         }

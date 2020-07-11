@@ -1,5 +1,5 @@
 const imageModel = (sequelize, type) => {
-    return sequelize.define("project", {
+    return sequelize.define("image", {
         id: {
             type: type.CHAR(8),
             primaryKey: true,
@@ -14,4 +14,4 @@ const imageModel = (sequelize, type) => {
     });
 };
 
-module.exports = imageModel;
+module.exports = imageModel; 
