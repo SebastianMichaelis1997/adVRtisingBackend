@@ -1,14 +1,14 @@
 const Sequelize = require("sequelize");
-const customerModel = require("../backend/models/customerModel");
-const groupModel = require("../backend/models/groupModel");
-const imageModel = require("../backend/models/imageModel");
-const projectModel = require("../backend/models/projectModel");
-const userGroupRelationModel = require("../backend/models/userGroupRelationModel");
-const userModel = require("../backend/models/userModel");
+const customerModel = require("./models/customerModel");
+const groupModel = require("./models/groupModel");
+const imageModel = require("./models/imageModel");
+const projectModel = require("./models/projectModel");
+const userGroupRelationModel = require("./models/userGroupRelationModel");
+const userModel = require("./models/userModel");
 
 
 
-const conn = new Sequelize("adVrtising_test", "adVrtising_test", "pEJntddulU9wFHk7crq1CpeloHGrEx", {
+const conn = new Sequelize("adVrtising_test", "adVrtising_test2", "pEJntddulU9wFHk7crq1CpeloHGrEx", {
     host: "h2890789.stratoserver.net",
     dialect: "mysql",
     logging: false

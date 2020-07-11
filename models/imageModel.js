@@ -7,7 +7,7 @@ const imageModel = (sequelize, type) => {
             defaultValue: type.UUIDV1
         },
         filePath: {
-            type: type.String,
+            type: type.STRING,
             allowNull: false,
             uniqe: true
         }
