@@ -8,12 +8,12 @@ const project = sequelize.project;
 const user = sequelize.user;
 
 module.exports = function (req, res) {
-    /* conn.drop().then((res) => {
-         console.log("Dropped");
-         conn.sync().then((res) => {
-             console.log("synced");
-             res.send("Tabellen leer initialisiert")
-         });
-     });*/
-    res.send("WOLOLO")
+    conn.drop().then((res) => {
+        console.log("Dropped");
+        conn.sync().then((res) => {
+            console.log("synced");
+            res.send("Tabellen leer initialisiert")
+        });
+    });
+
 };

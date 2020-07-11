@@ -8,7 +8,7 @@ const userModel = require("./models/userModel");
 
 
 
-const conn = new Sequelize("adVrtising_test", "adVrtising_test2", "pEJntddulU9wFHk7crq1CpeloHGrEx", {
+const conn = new Sequelize("adVrtising_test", "adVrtising_test", "pEJntddulU9wFHk7crq1CpeloHGrEx", {
     host: "h2890789.stratoserver.net",
     dialect: "mysql",
     logging: console.log
