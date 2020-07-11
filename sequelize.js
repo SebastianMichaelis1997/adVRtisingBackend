@@ -11,7 +11,7 @@ const userModel = require("./models/userModel");
 const conn = new Sequelize("adVrtising_test", "adVrtising_test2", "pEJntddulU9wFHk7crq1CpeloHGrEx", {
     host: "h2890789.stratoserver.net",
     dialect: "mysql",
-    logging: false
+    logging: console.log
 });
 
 const customer = customerModel(conn, Sequelize);
@@ -23,6 +23,8 @@ const user = userModel(conn, Sequelize);
 
 conn.sync().then(() => {
     console.log("Connected and synced to database");
+}).catch((err) => {
+    console.log('Unable to connect to the database:', err);
 });
 
 module.exports = {
