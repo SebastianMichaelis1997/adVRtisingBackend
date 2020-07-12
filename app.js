@@ -1,6 +1,8 @@
 var express = require("express");
 var bodyParser = require("body-parser");
+var passport = require("passport-local");
 var apiroutes = require("./routes/apiRoutes");
+
 
 var app = express();
 
