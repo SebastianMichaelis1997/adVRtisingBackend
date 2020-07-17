@@ -12,7 +12,8 @@ const BCRYPT_SALTROUNDS = 12;
 var IDStröer;
 var IDElaspix;
 var IDGroupElastixStröer;
-var IDPicadallyProject;
+var IDGroupHurensohn;
+var IDGroupArschloch;
 var globalRes;
 const ElaspixMail = "info@elaspix.com";
 const ElaspixPW = "MrMedal";
@@ -83,10 +84,68 @@ function createPicadallyProject() {
         imageJSON: JSON.stringify(imageJSON),
     }).then(result => {
         IDPicadallyProject = result.id;
-        finish();
+        createHurensohnGroup();
+    })
+}
+function createHurensohnGroup() {
+    group.create({
+        customerID: IDStröer,
+        name: "Hurensohn@Ströer"
+    }).then(result => {
+        IDGroupHurensohn = result.id;
+        userGroupRelation.create({
+            groupID: IDGroupHurensohn,
+            userID: IDElaspix
+        })
+        createDönerProject();
     })
 }
 
+function createDönerProject() {
+    var imageJSON = {
+        image00: true,
+        image01: true,
+        image02: false,
+        image03: false,
+        image04: true
+    };
+    project.create({
+        groupID: IDGroupHurensohn,
+        name: "Döner am Bach",
+        imageJSON: JSON.stringify(imageJSON),
+    }).then(() => {
+        createArschlochGroup();
+    })
+}
+function createArschlochGroup() {
+    group.create({
+        customerID: IDStröer,
+        name: "Arschloch@Ströer"
+    }).then(result => {
+        IDGroupArschloch = result.id;
+        userGroupRelation.create({
+            groupID: IDGroupArschloch,
+            userID: "IDElaspix"
+        })
+        createArschlochProject();
+    })
+}
+function createArschlochProject() {
+    var imageJSON = {
+        image00: true,
+        image01: true,
+        image02: false,
+        image03: false,
+        image04: true
+    };
+    project.create({
+        groupID: IDGroupArschloch,
+        name: "ArschlochProject",
+        imageJSON: JSON.stringify(imageJSON),
+    }).then(() => {
+        finish();
+    })
+}
 function finish() {
     globalRes.status(201).send("Tabellen initialisiert")
 }

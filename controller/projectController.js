@@ -1,9 +1,7 @@
-const { project } = require("../sequelize");
-const userGroupRelationModel = require("../models/userGroupRelationModel");
-const groupModel = require("../models/groupModel");
-
 const projectModel = require("../sequelize").project;
+const userGroupRelationModel = require("../sequelize").userGroupRelation;
 const userisAllowedOnGroup = require("./groupController").userIsAllowedOnGroup;
+const { Op } = require("sequelize");
 
 const postProject = async function (req, res) {
     const data = {
@@ -91,18 +89,68 @@ const postProject = async function (req, res) {
 }
 
 const getProject = async function (req, res) {
-
+    var userID = await (await req.user).dataValues.id;
+    var projectID = req.params.pid;
+    projectModel.findOne({
+        where: {
+            id: projectID
+        }
+    }).then(result => {
+        if (result == null) {
+            res.status(200).json({
+                message: "No project with this ID"
+            });
+            return;
+        }
+        if (userisAllowedOnGroup(userID, result.groupID)) {
+            res.status(401).json({
+                message: "user not allowed in requested project"
+            })
+            return;
+        }
+        res.status(200).json(result);
+    })
 }
+
 const getProjects = async function (req, res) {
-
+    var userID = await (await req.user).dataValues.id;
+    var useremail = await (await req.user).dataValues.email;
+    console.log(useremail)
+    var allProjects = [];
+    var allGroups = [null];
+    var results = await userGroupRelationModel.findAll({
+        where: {
+            userID: userID
+        },
+        raw: true
+    })
+    results.forEach(relation => {
+        allGroups.push(relation.groupID)
+    })
+    console.log("allGroups " + allGroups)
+    console.log("----------------------------------------")
+    projectModel.findAll({
+        where: {
+            groupID: {
+                [Op.or]: allGroups
+            }
+        },
+        raw: true
+    }).then(allProjects => {
+        console.log(allProjects)
+        res.status(200).json(allProjects)
+    })
 }
-
+//Inner Functions
 const userisAllowedonProject = async function (userID, projectID) {
     projectModel.findOne({
         where: {
             id: projectID
         }
     }).then(result => {
+        if (result = null) {
+            return false;
+        }
         return userisAllowedOnGroup(userID, result.groupID)
     })
 }
