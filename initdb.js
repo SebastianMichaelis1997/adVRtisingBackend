@@ -14,6 +14,8 @@ var IDElaspix;
 var IDGroupElastixStröer;
 var IDPicadallyProject;
 var globalRes;
+const ElaspixMail = "info@elaspix.com";
+const ElaspixPW = "MrMedal";
 
 var initdb = function (req, res) {
     globalRes = res;
@@ -41,10 +43,10 @@ function createStröer() {
 }
 
 async function createElaspix() {
-    var hash = await bcrypt.hash("MrMedal", BCRYPT_SALTROUNDS);
+    var hash = await bcrypt.hash(ElaspixPW, BCRYPT_SALTROUNDS);
     user.create({
         name: "Elaspix UG",
-        email: "info@elaspix.com",
+        email: ElaspixMail,
         password: hash,
         customerID: IDStröer
     }).then(result => {

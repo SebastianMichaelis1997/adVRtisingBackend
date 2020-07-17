@@ -6,7 +6,6 @@ function initialize(passport) {
         //Hole User aus Datenbank
         const user = await UserController.getUserByEmail(email);
         if (user == null) {
-            console.log(user);
             return done(null, false, { message: "No User with that email" })
         }
         try {

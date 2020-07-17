@@ -15,30 +15,28 @@ var app = express();
 initializePassport(passport)
 
 //Setup Express-App
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(session({
-    secret: "process.env.SESSION_SECRET",
-    resave: false,
-    saveUninitialized: false
-}))
-app.use(passport.initialize())
-app.use(passport.session())
-app.use((req, res, next) => {
-    console.log(req.method + "  " + req.url);
-    next()
-})
-app.use(methodOverride("_method"));
-app.use((req, res, next) => {
-    console.log(req.method + "  " + req.url);
-    next()
-})
+{
+    app.use(express.json());
+    app.use(express.urlencoded({ extended: false }));
+    app.use(session({
+        secret: "process.env.SESSION_SECRET",
+        resave: false,
+        saveUninitialized: false
+    }))
+    app.use(passport.initialize())
+    app.use(passport.session())
+    app.use(methodOverride("_method"));
+    app.use((req, res, next) => {
+        console.log(req.method + "  " + req.url);
+        next()
+    })
+}
 
 
 //Routes
 app.get("/init", init);
-
-app.get("/login", checkAuth.checkNotAuthenticated, (req, res) => {
+app.use("/api", checkAuth.isLoggedIn, apiroutes);
+app.get("/login", checkAuth.isLoggedOut, (req, res) => {
     res.send("logg dich ein die eumel");
 });
 
@@ -54,26 +52,28 @@ app.delete("/logout", (req, res) => {
     res.redirect("/login");
 })
 
-app.get("/", checkAuth.checkAuthenticated, (req, res) => {
+app.get("/", checkAuth.isLoggedIn, (req, res) => {
     res.send("logged in");
 })
 
-app.post("/register", checkAuth.checkNotAuthenticated, register);
+app.post("/register", checkAuth.isLoggedOut, register);
 
-app.get("/checkedIsLogin", (req, res) => {
-    if (req.isAuthenticated()) {
-        res.send("Login is True");
-    } else {
-        res.send("Login is False");
-    }
-})
+{
+    app.get("/checkedIsLogin", (req, res) => {
+        if (req.isAuthenticated()) {
+            res.send("Login is True");
+        } else {
+            res.send("Login is False");
+        }
+    })
 
-app.get("/checkedIsLogout", (req, res) => {
-    if (req.isAuthenticated()) {
-        res.send("LogOut is False");
-    } else {
-        res.send("LogOut is True");
-    }
-})
+    app.get("/checkedIsLogout", (req, res) => {
+        if (req.isAuthenticated()) {
+            res.send("LogOut is False");
+        } else {
+            res.send("LogOut is True");
+        }
+    })
+}
 
 module.exports = app;

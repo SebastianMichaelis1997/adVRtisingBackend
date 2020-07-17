@@ -1,7 +1,9 @@
 const router = require("express").Router();
-//Controller einbinden
+const projectController = require("../controller/projectController");
+const projectModel = require("../models/projectModel");
 
-router.use("/", (req, res) => {
-    res.send("Hello From Project");
-})
+router.post("/", projectController.postProject)
+router.get("/", projectController.getProjects)
+router.get("/:pid", projectController.getProject)
+
 module.exports = router;

@@ -1,11 +1,11 @@
-function checkAuthenticated(req, res, next) {
+function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
         return next()
     }
     res.redirect("/login");
 }
 
-function checkNotAuthenticated(req, res, next) {
+function isLoggedOut(req, res, next) {
     if (req.isAuthenticated()) {
         return res.redirect("/");
     }
@@ -13,6 +13,6 @@ function checkNotAuthenticated(req, res, next) {
 }
 
 module.exports = {
-    checkAuthenticated: checkAuthenticated,
-    checkNotAuthenticated: checkNotAuthenticated
+    isLoggedIn: isLoggedIn,
+    isLoggedOut: isLoggedOut
 }
