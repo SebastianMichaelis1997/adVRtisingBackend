@@ -7,7 +7,7 @@ const userModel = (sequelize, type) => {
             defaultValue: type.UUIDV1
         },
         customerID: {
-            type: type.CHAR(8),
+            type: type.CHAR(36),
             allowNull: false
         },
         name: {

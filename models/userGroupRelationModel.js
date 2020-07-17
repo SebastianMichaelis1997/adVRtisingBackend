@@ -1,11 +1,11 @@
 const userGroupRelationModel = (sequelize, type) => {
     return sequelize.define("userGroupRelation", {
-        GroupID: {
-            type: type.CHAR(8),
+        groupID: {
+            type: type.CHAR(36),
             allowNull: false
         },
-        UserID: {
-            type: type.CHAR(8),
+        userID: {
+            type: type.CHAR(36),
             allowNull: false
         }
     });

@@ -1,9 +1,9 @@
 const userModel = require("../sequelize").user;
 const bcrypt = require("bcrypt");
-
+const BCRYPT_SALTROUNDS = 12;
 
 const postUser = function (req, res) {
-    const BCRYPT_SALTROUNDS = 12;
+
     //fill requestBody in local data
     const data = {
         email: req.body.email,
