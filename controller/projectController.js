@@ -141,6 +141,41 @@ const getProjects = async function (req, res) {
         res.status(200).json(allProjects)
     })
 }
+
+const deleteProject = async function (req, res) {
+    {
+        var userID = await (await req.user).dataValues.id;
+        var projectID = req.params.pid;
+        projectModel.findOne({
+            where: {
+                id: projectID
+            }
+        }).then(result => {
+            if (result == null) {
+                res.status(200).json({
+                    message: "No project with this ID"
+                });
+                return;
+            }
+            if (userisAllowedOnGroup(userID, result.groupID)) {
+                res.status(401).json({
+                    message: "user not allowed in requested project"
+                })
+                return;
+            }
+            projectModel.destroy({
+                where:
+                {
+                    id: projectID
+                }
+            }).then(() => {
+                res.status(204).json({
+                    message: "Project deleted succesfully"
+                })
+            })
+        })
+    }
+}
 //Inner Functions
 const userisAllowedonProject = async function (userID, projectID) {
     projectModel.findOne({
@@ -157,5 +192,7 @@ const userisAllowedonProject = async function (userID, projectID) {
 module.exports = {
     postProject: postProject,
     getProject: getProject,
-    getProjects: getProjects
+    getProjects: getProjects,
+    deleteProject: deleteProject,
+    userisAllowedonProject: userisAllowedonProject
 }
