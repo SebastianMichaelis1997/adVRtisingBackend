@@ -42,22 +42,6 @@ app.get("/login", checkAuth.checkNotAuthenticated, (req, res) => {
     res.send("logg dich ein die eumel");
 });
 
-app.get("/checkedIsLogin", (req, res) => {
-    if (req.isAuthenticated()) {
-        res.send("Login is True");
-    } else {
-        res.send("Login is False");
-    }
-})
-
-app.get("/checkedIsLogout", (req, res) => {
-    if (req.isAuthenticated()) {
-        res.send("LogOut is False");
-    } else {
-        res.send("LogOut is True");
-    }
-})
-
 app.post("/login", passport.authenticate("local", {
     successRedirect: "/",
     failureRedirect: "/login",
@@ -75,7 +59,21 @@ app.get("/", checkAuth.checkAuthenticated, (req, res) => {
 })
 
 app.post("/register", checkAuth.checkNotAuthenticated, register);
-//Authentication Checking
 
+app.get("/checkedIsLogin", (req, res) => {
+    if (req.isAuthenticated()) {
+        res.send("Login is True");
+    } else {
+        res.send("Login is False");
+    }
+})
+
+app.get("/checkedIsLogout", (req, res) => {
+    if (req.isAuthenticated()) {
+        res.send("LogOut is False");
+    } else {
+        res.send("LogOut is True");
+    }
+})
 
 module.exports = app;
