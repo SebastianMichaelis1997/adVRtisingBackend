@@ -1,23 +1,81 @@
+//Import
 var express = require("express");
-var bodyParser = require("body-parser");
-var passport = require("passport-local");
+var passport = require("passport");
 var apiroutes = require("./routes/apiRoutes");
-
+var session = require("express-session");
+var methodOverride = require("method-override");
+var initializePassport = require("./auth/passport-config");
+var register = require("./controller/registerController").register;
+var checkAuth = require("./auth/checkAuth");
+var init = require("./initdb").init;
+var register = require("./controller/registerController").register;
 
 var app = express();
 
-app.use(bodyParser.json());
+initializePassport(passport)
 
+//Setup Express-App
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(session({
+    secret: "process.env.SESSION_SECRET",
+    resave: false,
+    saveUninitialized: false
+}))
+app.use(passport.initialize())
+app.use(passport.session())
 app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader(
-        "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept, authData, status, catid, cred, prod"
-    );
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
-    next();
+    console.log(req.method + "  " + req.url);
+    next()
+})
+app.use(methodOverride("_method"));
+app.use((req, res, next) => {
+    console.log(req.method + "  " + req.url);
+    next()
 })
 
-app.use("/api", apiroutes);
+
+//Routes
+app.get("/init", init);
+
+app.get("/login", checkAuth.checkNotAuthenticated, (req, res) => {
+    res.send("logg dich ein die eumel");
+});
+
+app.get("/checkedIsLogin", (req, res) => {
+    if (req.isAuthenticated()) {
+        res.send("Login is True");
+    } else {
+        res.send("Login is False");
+    }
+})
+
+app.get("/checkedIsLogout", (req, res) => {
+    if (req.isAuthenticated()) {
+        res.send("LogOut is False");
+    } else {
+        res.send("LogOut is True");
+    }
+})
+
+app.post("/login", passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/login",
+    failureFlash: false
+}));
+
+app.delete("/logout", (req, res) => {
+    req.logOut();
+    console.log("logged Out");
+    res.redirect("/login");
+})
+
+app.get("/", checkAuth.checkAuthenticated, (req, res) => {
+    res.send("logged in");
+})
+
+app.post("/register", checkAuth.checkNotAuthenticated, register);
+//Authentication Checking
+
 
 module.exports = app;

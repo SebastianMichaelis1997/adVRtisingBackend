@@ -1,9 +1,9 @@
 const userModel = (sequelize, type) => {
     return sequelize.define("user", {
         id: {
-            type: type.CHAR(8),
+            type: type.CHAR(36),
             primaryKey: true,
-            uniqe: true,
+            unique: true,
             defaultValue: type.UUIDV1
         },
         customerID: {
@@ -15,6 +15,10 @@ const userModel = (sequelize, type) => {
             allowNull: false
         },
         email: {
+            type: type.STRING,
+            allowNull: false
+        },
+        password: {
             type: type.STRING,
             allowNull: false
         }

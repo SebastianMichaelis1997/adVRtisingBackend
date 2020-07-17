@@ -7,13 +7,16 @@ const image = sequelize.image;
 const project = sequelize.project;
 const user = sequelize.user;
 
-module.exports = function (req, res) {
-    conn.drop().then((res) => {
+var initdb = function (req, res) {
+    conn.drop().then(() => {
         console.log("Dropped");
-        conn.sync().then((res) => {
+        conn.sync().then(() => {
             console.log("synced");
-            res.send("Tabellen leer initialisiert")
+            res.status(201).send("Tabellen leer initialisiert")
         });
     });
 
-};
+}
+
+
+module.exports = { init: initdb }
