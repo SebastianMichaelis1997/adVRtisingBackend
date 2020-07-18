@@ -4,6 +4,7 @@ var passport = require("passport");
 var apiroutes = require("./routes/apiRoutes");
 var session = require("express-session");
 var methodOverride = require("method-override");
+require("dotenv").config()
 var initializePassport = require("./auth/passport-config");
 var register = require("./controller/registerController").register;
 var checkAuth = require("./auth/checkAuth");
@@ -19,7 +20,7 @@ initializePassport(passport)
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
     app.use(session({
-        secret: "process.env.SESSION_SECRET",
+        secret: process.env.SESSION_SECRET,
         resave: false,
         saveUninitialized: false
     }))
@@ -58,22 +59,22 @@ app.get("/", checkAuth.isLoggedIn, (req, res) => {
 
 app.post("/register", checkAuth.isLoggedOut, register);
 
-{
-    app.get("/checkedIsLogin", (req, res) => {
-        if (req.isAuthenticated()) {
-            res.send("Login is True");
-        } else {
-            res.send("Login is False");
-        }
-    })
 
-    app.get("/checkedIsLogout", (req, res) => {
-        if (req.isAuthenticated()) {
-            res.send("LogOut is False");
-        } else {
-            res.send("LogOut is True");
-        }
-    })
-}
+app.get("/checkedIsLogin", (req, res) => {
+    if (req.isAuthenticated()) {
+        res.send("Login is True");
+    } else {
+        res.send("Login is False");
+    }
+})
+
+app.get("/checkedIsLogout", (req, res) => {
+    if (req.isAuthenticated()) {
+        res.send("LogOut is False");
+    } else {
+        res.send("LogOut is True");
+    }
+})
+
 
 module.exports = app;

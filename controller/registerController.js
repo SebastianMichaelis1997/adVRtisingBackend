@@ -4,7 +4,6 @@ const bcrypt = require("bcrypt");
 const BCRYPT_SALTROUNDS = 12;
 
 const postUser = function (req, res) {
-
     //fill requestBody in local data
     const data = {
         email: req.body.email,
