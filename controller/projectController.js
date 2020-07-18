@@ -97,16 +97,17 @@ const getProject = async function (req, res) {
         where: {
             id: projectID
         }
-    }).then(result => {
+    }).then(async result => {
         if (result == null) {
             res.status(404).json({
                 message: "No project with this ID"
             });
             return;
         }
-        if (userisAllowedOnGroup(userID, result.groupID)) {
+        var userinProject = await userisAllowedonProject(userID, result.id);
+        if (!userinProject) {
             res.status(401).json({
-                message: "user not allowed in requested project"
+                message: "user not allowed in requested group"
             })
             return;
         }
@@ -139,39 +140,41 @@ const getProjects = async function (req, res) {
     })
 }
 
-/*const deleteProject = async function (req, res) {
+const deleteProject = async function (req, res) {
     var userID = await (await req.user).dataValues.id;
     var projectID = req.params.pid;
     projectModel.findOne({
         where: {
             id: projectID
         }
-    }).then(result => {
+    }).then(async result => {
         if (result == null) {
             res.status(404).json({
                 message: "No project with this ID"
             });
             return;
         }
-
-        if (userisAllowedOnGroup(userID, result.groupID)) {
+        var userinProject = await userisAllowedonProject(userID, projectID);
+        if (!userinProject) {
             res.status(401).json({
-                message: "user not allowed in requested project"
+                message: "user not allowed in requested group"
             })
             return;
         }
+        console.log("user is legal")
         projectModel.destroy({
             where:
             {
                 id: projectID
             }
         }).then(() => {
+            console.log("project was destroyed")
             res.status(204).json({
                 message: "Project deleted succesfully"
             })
         })
     })
-}*/
+}
 
 const updateImages = async function (req, res) {
     var projectID = req.params.pid;
@@ -267,7 +270,7 @@ module.exports = {
     postProject: postProject,
     getProject: getProject,
     getProjects: getProjects,
-    /*deleteProject: deleteProject,*/
+    deleteProject: deleteProject,
     userisAllowedonProject: userisAllowedonProject,
     updateImages: updateImages
 }
