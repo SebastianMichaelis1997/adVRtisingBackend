@@ -97,7 +97,7 @@ const getProject = async function (req, res) {
         }
     }).then(result => {
         if (result == null) {
-            res.status(200).json({
+            res.status(404).json({
                 message: "No project with this ID"
             });
             return;
@@ -147,7 +147,7 @@ const deleteProject = async function (req, res) {
             }
         }).then(result => {
             if (result == null) {
-                res.status(200).json({
+                res.status(404).json({
                     message: "No project with this ID"
                 });
                 return;

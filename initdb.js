@@ -147,7 +147,9 @@ function createArschlochProject() {
     })
 }
 function finish() {
-    globalRes.status(201).send("Tabellen initialisiert")
+    globalRes.status(201).json({
+        message: "Datenbank initialisiert"
+    })
 }
 
 
