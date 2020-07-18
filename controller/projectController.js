@@ -116,8 +116,7 @@ const getProjects = async function (req, res) {
     var userID = await (await req.user).dataValues.id;
     var useremail = await (await req.user).dataValues.email;
     console.log(useremail)
-    var allProjects = [];
-    var allGroups = [null];
+    var allGroups = [];
     var results = await userGroupRelationModel.findAll({
         where: {
             userID: userID
@@ -127,13 +126,9 @@ const getProjects = async function (req, res) {
     results.forEach(relation => {
         allGroups.push(relation.groupID)
     })
-    console.log("allGroups " + allGroups)
-    console.log("----------------------------------------")
     projectModel.findAll({
         where: {
-            groupID: {
-                [Op.or]: allGroups
-            }
+            groupID: allGroups
         },
         raw: true
     }).then(allProjects => {
@@ -189,6 +184,7 @@ const userisAllowedonProject = async function (userID, projectID) {
         return userisAllowedOnGroup(userID, result.groupID)
     })
 }
+
 module.exports = {
     postProject: postProject,
     getProject: getProject,
