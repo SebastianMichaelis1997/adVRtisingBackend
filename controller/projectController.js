@@ -1,3 +1,5 @@
+const { image } = require("../sequelize");
+
 const projectModel = require("../sequelize").project;
 const userGroupRelationModel = require("../sequelize").userGroupRelation;
 const userisAllowedOnGroup = require("./groupController").userIsAllowedOnGroup;
@@ -16,7 +18,6 @@ const postProject = async function (req, res) {
             return;
         }
     }
-
     if (!Array.isArray(data.choosenImages)) {
         res.status(422).json({
             message: "choosenImages doesnt contain an array"
@@ -26,7 +27,6 @@ const postProject = async function (req, res) {
     //getUserID
     var userID = await (await req.user).id;
     //Check if User is in group
-    var userInGroup = await userisAllowedOnGroup(userID, data.groupID);
     if (!await userisAllowedOnGroup(userID, data.groupID)) {
         res.status(401).json({
             message: "user not allowed in requested group"
@@ -45,6 +45,7 @@ const postProject = async function (req, res) {
         return;
     }
     //all legal, now do Stuff
+    data.choosenImages = validateImageArray(data.choosenImages);
     projectModel.create({
         groupID: data.groupID,
         name: data.name,
@@ -52,7 +53,7 @@ const postProject = async function (req, res) {
     }).then(result => {
         res.status(201).json({
             message: "project crerated succesfully",
-            projectID: result.id
+            projectID: result.id,
         })
     })
 
@@ -179,12 +180,12 @@ const updateImages = async function (req, res) {
         return;
     }
     //all legal, now do Stuff
-
+    newImages = validateImageArray(newImages);
     project.update({
         imageJSON: JSON.stringify(newImages)
-    }).then(() => {
+    }).then((resukt) => {
         res.status(200).json({
-            message: "Bilder wurden geupdatet"
+            message: "Bilder wurden geupdatet",
         })
     })
 }
@@ -205,6 +206,32 @@ const userisAllowedonProject = async function (userID, projectID) {
     }
 }
 
+const validateImageArray = function (imageArray) {
+    if (imageArray.length == 0) {
+        return imageArray
+    }
+    var imageArray = imageArray.filter(function (el) {
+        return el != null;
+    });
+    for (var i = 0; i < imageArray.length; i++) {
+        for (var j = 0; j < imageArray.length - i - 1; j++) {
+            if (imageArray[j] > imageArray[j + 1]) {
+                var temp = imageArray[j];
+                imageArray[j] = imageArray[j + 1];
+                imageArray[j + 1] = temp;
+            }
+        }
+    }
+    var last = -1;
+    var newArray = []
+    imageArray.forEach(value => {
+        if (value <= 4 && value >= 0 && value != last && !(typeof value == "undefined")) {
+            last = value;
+            newArray.push(value);
+        }
+    })
+    return newArray
+}
 
 module.exports = {
     postProject: postProject,
