@@ -2,8 +2,6 @@
 const groupModel = require("../sequelize").group;
 const userGroupRelationModel = require("../sequelize").userGroupRelation;
 
-
-
 const getGroup = async function (Req, res) {
     var userID = await (await req.user).id;
     var groupID = req.params.gid;
