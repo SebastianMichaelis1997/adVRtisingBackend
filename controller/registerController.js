@@ -22,7 +22,8 @@ const postUser = function (req, res) {
     customerModel.findOne({
         where: {
             id: data.agentur_id
-        }
+        },
+        raw: true
     }).then(result => {
         if (result == null) {
             res.status(422).json({
@@ -32,7 +33,8 @@ const postUser = function (req, res) {
             userModel.findOne({
                 where: {
                     email: data.email
-                }
+                },
+                raw: true
             }).then(async user => {
                 if (user != null) {
                     res.status(409).json({

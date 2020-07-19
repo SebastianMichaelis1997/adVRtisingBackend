@@ -71,13 +71,7 @@ function createElaspixStröerGroup() {
 }
 
 function createPicadallyProject() {
-    var imageJSON = {
-        image00: false,
-        image01: true,
-        image02: false,
-        image03: true,
-        image04: true
-    };
+    var imageJSON = [1, 3, 4];
     project.create({
         groupID: IDGroupElastixStröer,
         name: "Picadally Circus",
@@ -102,13 +96,7 @@ function createHurensohnGroup() {
 }
 
 function createDönerProject() {
-    var imageJSON = {
-        image00: true,
-        image01: true,
-        image02: false,
-        image03: false,
-        image04: true
-    };
+    var imageJSON = [0, 1, 4];
     project.create({
         groupID: IDGroupHurensohn,
         name: "Döner am Bach",
@@ -131,13 +119,7 @@ function createArschlochGroup() {
     })
 }
 function createArschlochProject() {
-    var imageJSON = {
-        image00: true,
-        image01: true,
-        image02: false,
-        image03: false,
-        image04: true
-    };
+    var imageJSON = [1, 2, 4];
     project.create({
         groupID: IDGroupArschloch,
         name: "ArschlochProject",
