@@ -32,6 +32,9 @@ initializePassport(passport)
         req.body.password = req.query.password;
         next()
     })
+    app.use((req, res, next) => {
+        console.log(req.method + " " + req.url)
+    })
 }
 
 //Routes
