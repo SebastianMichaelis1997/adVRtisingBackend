@@ -64,7 +64,7 @@ app.delete("/logout", (req, res) => {
 })
 
 app.get("/", checkAuth.isLoggedIn, (req, res) => {
-    res.send("logged in");
+    res.json({ String: "logged in" });
 })
 
 app.post("/register", checkAuth.isLoggedOut, register);

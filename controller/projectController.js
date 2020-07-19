@@ -190,6 +190,35 @@ const updateImages = async function (req, res) {
     })
 }
 
+const getProjectsIDs = async (req, res) => {
+    var userID = await (await req.user).id;
+    console.log(userID)
+    var allGroups = [];
+    var results = await userGroupRelationModel.findAll({
+        where: {
+            userID: userID
+        },
+        raw: true
+    })
+    results.forEach(relation => {
+        allGroups.push(relation.groupID)
+    })
+    projectModel.findAll({
+        where: {
+            groupID: allGroups
+        },
+        raw: true
+    }).then(allProjects => {
+        var projectIDs = []
+        allProjects.forEach(project => {
+            projectIDs.push(project.id)
+        })
+        res.status(200).json({
+            projectIDs: projectIDs
+        })
+    })
+}
+
 //Inner Functions
 const userisAllowedonProject = async function (userID, projectID) {
     var project = await projectModel.findOne({
@@ -239,5 +268,6 @@ module.exports = {
     getProjects: getProjectS,
     deleteProject: deleteProject,
     userisAllowedonProject: userisAllowedonProject,
-    updateImages: updateImages
+    updateImages: updateImages,
+    getProjectsIDs: getProjectsIDs
 }
