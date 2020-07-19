@@ -27,12 +27,12 @@ initializePassport(passport)
     app.use(passport.initialize())
     app.use(passport.session())
     app.use(methodOverride("_method"));
-    /*app.use((req, res, next) => {
-        console.log(req.method + "  " + req.url);
+    app.use("/unsecurelogin", (req, res, next) => {
+        req.body.email = req.query.email;
+        req.body.password = req.query.password;
         next()
-    })*/
+    })
 }
-
 
 //Routes
 app.get("/init", init);
@@ -41,7 +41,13 @@ app.get("/login", checkAuth.isLoggedOut, (req, res) => {
     res.send("logg dich ein die eumel");
 });
 
-app.post("/login", passport.authenticate("local", {
+app.post("/unsecurelogin", checkAuth.isLoggedOut, passport.authenticate("local", {
+    successRedirect: "/",
+    failureRedirect: "/login",
+    failureFlash: false
+}));
+
+app.post("/login", checkAuth.isLoggedOut, passport.authenticate("local", {
     successRedirect: "/",
     failureRedirect: "/login",
     failureFlash: false
