@@ -24,7 +24,11 @@ const getProjectImages = async function (req, res) {
             })
             return;
         }
-        res.status(200).json(JSON.parse(result.imageJSON));
+        var images = {
+            projectID: result.id,
+            images: JSON.parse(result.imageJSON)
+        }
+        res.status(200).json(images);
     })
 }
 
