@@ -1,7 +1,7 @@
 $(document).ready(function () {
     $.getJSON("/api/project", data => {
         var newRow = true;
-        var domStr = '<div class="container"><h1> Ihre Projekte</h1>'
+        var domStr = '<div class="container">'
         data.forEach(currentProject => {
             if (newRow) {
                 domStr += '<div class="row">';

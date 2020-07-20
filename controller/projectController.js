@@ -3,29 +3,25 @@ const { image } = require("../sequelize");
 const projectModel = require("../sequelize").project;
 const userGroupRelationModel = require("../sequelize").userGroupRelation;
 const userisAllowedOnGroup = require("./groupController").userIsAllowedOnGroup;
+const getFirstUserGroup = require("./groupController").getFirstUserGroup;
 
 const postProject = async function (req, res) {
+    console.log(req.body)
+    var userID = await (await req.user).id;
     const data = {
-        groupID: req.body.groupID,
+        groupID: await getFirstUserGroup(userID),
         name: req.body.name,
-        choosenImages: req.body.choosenImages
+        choosenImages: []
     }
-    for (var key in data) {
-        if (data[key] == null || data[key] == "") {
-            res.status(422).json({
-                message: "value in field " + key + " is missing"
-            });
-            return;
+    if ("choosenImages" in req.body) {
+        if (!Array.isArray(req.body.choosenImages)) {
+            data.choosenImages.push((req.body.choosenImages * 1))
+        } else {
+            req.body.choosenImages.forEach(num => {
+                data.choosenImages.push((num * 1))
+            })
         }
     }
-    if (!Array.isArray(data.choosenImages)) {
-        res.status(422).json({
-            message: "choosenImages doesnt contain an array"
-        })
-        return;
-    };
-    //getUserID
-    var userID = await (await req.user).id;
     //Check if User is in group
     if (!await userisAllowedOnGroup(userID, data.groupID)) {
         res.status(401).json({
@@ -51,11 +47,9 @@ const postProject = async function (req, res) {
         name: data.name,
         imageJSON: JSON.stringify(data.choosenImages)
     }).then(result => {
-        res.status(201).json({
-            message: "project crerated succesfully",
-            projectID: result.id,
-        })
+        res.redirect("/projects");
     })
+    console.log()
 
 }
 

@@ -63,6 +63,10 @@ app.get("/", checkAuth.isLoggedIn, (req, res) => {
 app.get("/projects", checkAuth.isLoggedIn, (req, res) => {
     res.sendFile(path.join(basePath + "projects.html"))
 })
+
+app.get("/createProject", checkAuth.isLoggedIn, (req, res) => {
+    res.sendFile(path.join(basePath + "createProject.html"))
+})
 //Routes
 app.get("/init", init);
 app.use("/api", checkAuth.isLoggedIn, apiroutes);

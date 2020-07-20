@@ -57,10 +57,21 @@ const userIsAllowedOnGroup = async function (userID, groupID) {
     }
 }
 
+const getFirstUserGroup = async function (userID) {
+    const group = await userGroupRelationModel.findOne({
+        where: {
+            userID: userID
+        },
+        raw: true
+    })
+    return group.groupID
+}
+
 module.exports = {
     userIsAllowedOnGroup: userIsAllowedOnGroup,
     getGroup: getGroup,
     getGroupS: getGroupS,
     postGroup: postGroup,
-    deleteGroup: deleteGroup
+    deleteGroup: deleteGroup,
+    getFirstUserGroup: getFirstUserGroup
 }
