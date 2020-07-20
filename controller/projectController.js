@@ -133,9 +133,7 @@ const deleteProject = async function (req, res) {
                 id: projectID
             }
         }).then(() => {
-            res.status(204).json({
-                message: "Project deleted succesfully"
-            })
+            res.redirect("/projects")
         })
     })
 }

@@ -72,13 +72,13 @@ app.get("/init", init);
 app.use("/api", checkAuth.isLoggedIn, apiroutes);
 
 app.post("/unsecurelogin", checkAuth.isLoggedOut, passport.authenticate("local", {
-    successRedirect: "/",
+    successRedirect: "/projects",
     failureRedirect: "/login",
     failureFlash: false
 }));
 
 app.post("/login", checkAuth.isLoggedOut, passport.authenticate("local", {
-    successRedirect: "/",
+    successRedirect: "/projects",
     failureRedirect: "/login",
     failureFlash: false
 }));

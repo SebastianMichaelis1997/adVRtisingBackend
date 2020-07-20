@@ -41,6 +41,10 @@ function createRadioButtonString(currentProject) {
     formStr += '</ul>'
     formStr += '</fieldset>'
     formStr += '<button type="submit">Bestätigen</button>'
+    formStr += '</form><br/>'
+    formStr += '<form action="/api/project/' + currentProject.id + '?_method=DELETE" method="POST">'
+    formStr += '<input type="checkbox" name="confirmed" required="">'
+    formStr += '<button type="submit">  Löschen</button>'
     formStr += '</form>'
     return formStr
 }
