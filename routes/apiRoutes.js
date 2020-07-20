@@ -7,4 +7,4 @@ router.get("/user", userController.getUser)
 router.use("/project", projectRoutes);
 router.use("/group", groupRoutes)
 
-module.exports = router
+module.exports = router 

@@ -88,7 +88,6 @@ const getProject = async function (req, res) {
 
 const getProjectS = async function (req, res) {
     var userID = await (await req.user).id;
-    console.log(userID)
     var allGroups = [];
     var results = await userGroupRelationModel.findAll({
         where: {
@@ -134,14 +133,12 @@ const deleteProject = async function (req, res) {
             })
             return;
         }
-        console.log("user is legal")
         projectModel.destroy({
             where:
             {
                 id: projectID
             }
         }).then(() => {
-            console.log("project was destroyed")
             res.status(204).json({
                 message: "Project deleted succesfully"
             })
@@ -151,13 +148,16 @@ const deleteProject = async function (req, res) {
 
 const updateImages = async function (req, res) {
     var projectID = req.params.pid;
-    var newImages = req.body.choosenImages;
-    if (!Array.isArray(newImages)) {
-        res.status(422).json({
-            message: "choosenImages doesnt contain an array"
-        })
-        return;
-    };
+    var newImages = [];
+    if ("choosenImages" in req.body) {
+        if (!Array.isArray(req.body.choosenImages)) {
+            newImages.push((req.body.choosenImages * 1))
+        } else {
+            req.body.choosenImages.forEach(num => {
+                newImages.push((num * 1))
+            })
+        }
+    }
     var project = await projectModel.findOne({
         where: {
             id: projectID
@@ -183,16 +183,13 @@ const updateImages = async function (req, res) {
     newImages = validateImageArray(newImages);
     project.update({
         imageJSON: JSON.stringify(newImages)
-    }).then((resukt) => {
-        res.status(200).json({
-            message: "Bilder wurden geupdatet",
-        })
+    }).then(() => {
+        res.redirect("/projects");
     })
 }
 
 const getProjectsIDs = async (req, res) => {
     var userID = await (await req.user).id;
-    console.log(userID)
     var allGroups = [];
     var results = await userGroupRelationModel.findAll({
         where: {

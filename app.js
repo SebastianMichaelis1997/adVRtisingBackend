@@ -10,6 +10,8 @@ var register = require("./controller/registerController").register;
 var checkAuth = require("./auth/checkAuth");
 var init = require("./initdb").init;
 var register = require("./controller/registerController").register;
+var path = require("path");
+var scriptController = require("./controller/scriptContoller")
 
 var app = express();
 
@@ -17,6 +19,7 @@ initializePassport(passport)
 
 //Setup Express-App
 {
+    var basePath = path.join(__dirname + "/views/")
     app.use(express.json());
     app.use(express.urlencoded({ extended: false }));
     app.use(session({
@@ -33,17 +36,36 @@ initializePassport(passport)
         next()
     })
     app.use((req, res, next) => {
-        console.log(req.method + " " + req.url);
+        var today = new Date();
+        var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        var dateTime = date + ' ' + time;
+        console.log(dateTime + " " + req.method + " " + req.url);
         next()
     })
 }
+//ScriptRoutes
+app.get("/scripts/:script", scriptController.getScriptByName)
 
+app.use("/print", (req, res) => {
+    console.log(req.body)
+    res.redirect("/projects")
+})
+//Websiteroutes
+app.get("/login", checkAuth.isLoggedOut, (req, res) => {
+    res.sendFile(path.join(basePath + "login.html"))
+});
+
+app.get("/", checkAuth.isLoggedIn, (req, res) => {
+    res.sendFile(path.join(basePath + "root.html"))
+})
+
+app.get("/projects", checkAuth.isLoggedIn, (req, res) => {
+    res.sendFile(path.join(basePath + "projects.html"))
+})
 //Routes
 app.get("/init", init);
 app.use("/api", checkAuth.isLoggedIn, apiroutes);
-app.get("/login", checkAuth.isLoggedOut, (req, res) => {
-    res.send("logg dich ein die eumel");
-});
 
 app.post("/unsecurelogin", checkAuth.isLoggedOut, passport.authenticate("local", {
     successRedirect: "/",
@@ -59,15 +81,13 @@ app.post("/login", checkAuth.isLoggedOut, passport.authenticate("local", {
 
 app.delete("/logout", (req, res) => {
     req.logOut();
-    console.log("logged Out");
     res.redirect("/login");
 })
 
-app.get("/", checkAuth.isLoggedIn, (req, res) => {
-    res.json({ String: "logged in" });
-})
+
 
 app.post("/register", checkAuth.isLoggedOut, register);
+
 
 
 app.get("/checkedIsLogin", (req, res) => {
