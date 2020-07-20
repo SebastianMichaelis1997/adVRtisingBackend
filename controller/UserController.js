@@ -20,7 +20,13 @@ var getUserByID = async function (id) {
     return user;
 }
 
+var getUser = async function (req, res) {
+    var userID = await (await req.user).id;
+    var user = await req.user
+    res.status(200).json(user)
+}
 module.exports = {
     getUserByEmail: getUserByEmail,
-    getUserByID: getUserByID
+    getUserByID: getUserByID,
+    getUser: getUser
 }
