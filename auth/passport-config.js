@@ -1,6 +1,6 @@
 const LocalStrategy = require("passport-local").Strategy;
 const bcrypt = require("bcrypt");
-const UserController = require("../controller/userController");
+const UserController = require("../controller/UserController");
 function initialize(passport) {
     const authenticateUser = async (email, password, done) => {
         //Hole User aus Datenbank

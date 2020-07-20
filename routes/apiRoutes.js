@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const projectRoutes = require("./projectRoutes");
 const groupRoutes = require("./groupRoutes")
-const userController = require("../controller/userController")
+const userController = require("../controller/UserController")
 
 router.get("/user", userController.getUser)
 router.use("/project", projectRoutes);
