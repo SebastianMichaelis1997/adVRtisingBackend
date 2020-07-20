@@ -96,7 +96,8 @@ const getProjectS = async function (req, res) {
         where: {
             groupID: allGroups
         },
-        raw: true
+        raw: true,
+        order: [["name", "ASC"]]
     }).then(allProjects => {
         allProjects.forEach(project => {
             project.imageJSON = JSON.parse(project.imageJSON);

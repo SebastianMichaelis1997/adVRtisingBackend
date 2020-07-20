@@ -84,7 +84,7 @@ function createPicadallyProject() {
 function createHurensohnGroup() {
     group.create({
         customerID: IDStröer,
-        name: "Hurensohn@Ströer"
+        name: "Elaspix4Edeka@Ströer"
     }).then(result => {
         IDGroupHurensohn = result.id;
         userGroupRelation.create({
@@ -99,7 +99,7 @@ function createDönerProject() {
     var imageJSON = [0, 1, 4];
     project.create({
         groupID: IDGroupHurensohn,
-        name: "Döner am Bach",
+        name: "Times Square",
         imageJSON: JSON.stringify(imageJSON),
     }).then(() => {
         createArschlochGroup();
@@ -108,7 +108,7 @@ function createDönerProject() {
 function createArschlochGroup() {
     group.create({
         customerID: IDStröer,
-        name: "Arschloch@Ströer"
+        name: "@Ströer"
     }).then(result => {
         IDGroupArschloch = result.id;
         userGroupRelation.create({
@@ -122,7 +122,7 @@ function createArschlochProject() {
     var imageJSON = [1, 2, 4];
     project.create({
         groupID: IDGroupArschloch,
-        name: "ArschlochProject",
+        name: "TausendschönProject",
         imageJSON: JSON.stringify(imageJSON),
     }).then(() => {
         finish();
