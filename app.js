@@ -57,7 +57,7 @@ app.get("/login", checkAuth.isLoggedOut, (req, res) => {
 });
 
 app.get("/", checkAuth.isLoggedIn, (req, res) => {
-    res.sendFile(path.join(basePath + "root.html"))
+    res.redirect("/projects");
 })
 
 app.get("/projects", checkAuth.isLoggedIn, (req, res) => {
